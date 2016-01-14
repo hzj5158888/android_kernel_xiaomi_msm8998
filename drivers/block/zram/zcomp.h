@@ -13,7 +13,32 @@
 struct zcomp_strm {
 	/* compression/decompression buffer */
 	void *buffer;
+<<<<<<< HEAD
 	struct crypto_comp *tfm;
+=======
+	/*
+	 * The private data of the compression stream, only compression
+	 * stream backend can touch this (e.g. compression algorithm
+	 * working memory)
+	 */
+	void *private;
+	/* used in multi stream backend, protected by backend strm_lock */
+	struct list_head list;
+};
+
+/* static compression backend */
+struct zcomp_backend {
+	int (*compress)(const unsigned char *src, unsigned char *dst,
+			size_t *dst_len, void *private);
+
+	int (*decompress)(const unsigned char *src, size_t src_len,
+			unsigned char *dst);
+
+	void *(*create)(gfp_t flags);
+	void (*destroy)(void *private);
+
+	const char *name;
+>>>>>>> 7a3dc52a7679... UPSTREAM: zram: pass gfp from zcomp frontend to backend
 };
 
 /* dynamic per-device compression frontend */
