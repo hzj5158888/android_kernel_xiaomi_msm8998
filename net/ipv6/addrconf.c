@@ -5867,6 +5867,7 @@ static struct addrconf_sysctl_table
 			.proc_handler	= proc_dointvec,
 		},
 		{
+<<<<<<< HEAD
 			.procname	= "drop_unsolicited_na",
 			.data		= &ipv6_devconf.drop_unsolicited_na,
 			.maxlen		= sizeof(int),
@@ -5874,6 +5875,8 @@ static struct addrconf_sysctl_table
 			.proc_handler	= proc_dointvec,
 		},
 		{
+=======
+>>>>>>> 288da5148019a... ipv6: add option to drop unicast encapsulated in L2 multicast
 			/* sentinel */
 		}
 	},
