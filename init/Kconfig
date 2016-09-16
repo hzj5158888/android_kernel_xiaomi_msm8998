@@ -26,6 +26,19 @@ config IRQ_WORK
 config BUILDTIME_EXTABLE_SORT
 	bool
 
+<<<<<<< HEAD
+=======
+config THREAD_INFO_IN_TASK
+	bool
+	help
+	  Select this to move thread_info off the stack into task_struct.  To
+	  make this work, an arch will need to remove all thread_info fields
+	  except flags and fix any runtime bugs.
+
+	  One subtle change that will be needed is to use try_get_task_stack()
+	  and put_task_stack() in save_thread_stack_tsk() and get_wchan().
+
+>>>>>>> b5f72ee988ae... UPSTREAM: sched/core: Add try_get_task_stack() and put_task_stack()
 menu "General setup"
 
 config BROKEN
