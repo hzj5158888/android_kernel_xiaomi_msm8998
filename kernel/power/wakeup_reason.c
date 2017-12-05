@@ -48,6 +48,7 @@ static ssize_t last_resume_reason_show(struct kobject *kobj, struct kobj_attribu
 	struct irq_desc *desc;
 	spin_lock(&resume_reason_lock);
 	if (suspend_abort) {
+<<<<<<< HEAD
 		buf_offset = sprintf(buf, "Abort: %s", abort_reason);
 	} else {
 		for (irq_no = 0; irq_no < irqcount; irq_no++) {
@@ -59,6 +60,76 @@ static ssize_t last_resume_reason_show(struct kobject *kobj, struct kobj_attribu
 				buf_offset += sprintf(buf + buf_offset, "%d\n",
 						irq_list[irq_no]);
 		}
+=======
+		pr_info("Abort: %s\n", abort_reason);
+		return;
+	}
+
+	wakeups = get_wakeup_reasons_nosync();
+	list_for_each_entry(n, wakeups, next) {
+		if (n->desc && n->desc->action && n->desc->action->name)
+			pr_info("Resume caused by IRQ %d, %s\n", n->irq,
+				n->desc->action->name);
+		else
+			pr_info("Resume caused by IRQ %d\n", n->irq);
+	}
+}
+
+static bool walk_irq_node_tree(struct wakeup_irq_node *root,
+		bool (*visit)(struct wakeup_irq_node *, void *),
+		void *cookie)
+{
+	struct wakeup_irq_node *n, *t;
+
+	if (!root)
+		return true;
+
+	list_for_each_entry_safe(n, t, &root->siblings, siblings) {
+		if (!walk_irq_node_tree(n->child, visit, cookie))
+			return false;
+		if (!visit(n, cookie))
+			return false;
+	}
+
+	if (!walk_irq_node_tree(root->child, visit, cookie))
+		return false;
+	return visit(root, cookie);
+}
+
+#ifdef CONFIG_DEDUCE_WAKEUP_REASONS
+static bool is_node_handled(struct wakeup_irq_node *n, void *_p)
+{
+	return n->handled;
+}
+
+static bool base_irq_nodes_done(void)
+{
+	return walk_irq_node_tree(base_irq_nodes, is_node_handled, NULL);
+}
+#endif
+
+struct buf_cookie {
+	char *buf;
+	int buf_offset;
+};
+
+static bool print_leaf_node(struct wakeup_irq_node *n, void *_p)
+{
+	struct buf_cookie *b = _p;
+	if (!n->child) {
+		if (n->desc && n->desc->action && n->desc->action->name)
+			b->buf_offset +=
+				snprintf(b->buf + b->buf_offset,
+					PAGE_SIZE - b->buf_offset,
+					"%d %s\n",
+					n->irq, n->desc->action->name);
+		else
+			b->buf_offset +=
+				snprintf(b->buf + b->buf_offset,
+					PAGE_SIZE - b->buf_offset,
+					"%d\n",
+					n->irq);
+>>>>>>> 2b4317f62c9c... PM: wakeup_reasons: Fix formatting for printk
 	}
 	spin_unlock(&resume_reason_lock);
 	return buf_offset;
