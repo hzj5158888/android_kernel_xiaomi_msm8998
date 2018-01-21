@@ -1594,6 +1594,17 @@ struct task_struct {
 	struct sched_entity se;
 	struct sched_rt_entity rt;
 #ifdef CONFIG_SCHED_WALT
+<<<<<<< HEAD
+=======
+	struct ravg ravg;
+	/*
+	 * 'init_load_pct' represents the initial task load assigned to children
+	 * of this task
+	 */
+	u32 init_load_pct;
+#endif
+#ifdef CONFIG_SCHED_HMP
+>>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 	struct ravg ravg;
 	/*
 	 * 'init_load_pct' represents the initial task load assigned to children

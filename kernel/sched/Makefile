@@ -16,6 +16,10 @@ obj-y += idle_task.o fair.o rt.o deadline.o stop_task.o
 obj-y += wait.o completion.o idle.o
 obj-$(CONFIG_SMP) += cpupri.o cpudeadline.o energy.o
 obj-$(CONFIG_SCHED_WALT) += walt.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SCHED_HMP) += hmp.o boost.o
+>>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 obj-$(CONFIG_SCHED_AUTOGROUP) += auto_group.o
 obj-$(CONFIG_SCHEDSTATS) += stats.o
 obj-$(CONFIG_SCHED_DEBUG) += debug.o

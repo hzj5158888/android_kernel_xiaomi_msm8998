@@ -1041,6 +1041,10 @@ TRACE_EVENT(walt_update_task_ravg,
 		__array(	char,	comm,   TASK_COMM_LEN	)
 		__field(	pid_t,	pid			)
 		__field(	pid_t,	cur_pid			)
+<<<<<<< HEAD
+=======
+		__field(unsigned int,	cur_freq		)
+>>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 		__field(	u64,	wallclock		)
 		__field(	u64,	mark_start		)
 		__field(	u64,	delta_m			)
@@ -1068,6 +1072,10 @@ TRACE_EVENT(walt_update_task_ravg,
 		__entry->evt            = evt;
 		__entry->cpu            = rq->cpu;
 		__entry->cur_pid        = rq->curr->pid;
+<<<<<<< HEAD
+=======
+		__entry->cur_freq       = rq->cur_freq;
+>>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
 		__entry->pid            = p->pid;
 		__entry->mark_start     = p->ravg.mark_start;
@@ -1086,10 +1094,18 @@ TRACE_EVENT(walt_update_task_ravg,
 		__entry->active_windows	= p->ravg.active_windows;
 	),
 
+<<<<<<< HEAD
 	TP_printk("wc %llu ws %llu delta %llu event %d cpu %d cur_pid %d task %d (%s) ms %llu delta %llu demand %u sum %u irqtime %llu"
 		" cs %llu ps %llu util %lu cur_window %u prev_window %u active_wins %u"
 		, __entry->wallclock, __entry->win_start, __entry->delta,
 		__entry->evt, __entry->cpu, __entry->cur_pid,
+=======
+	TP_printk("wc %llu ws %llu delta %llu event %d cpu %d cur_freq %u cur_pid %d task %d (%s) ms %llu delta %llu demand %u sum %u irqtime %llu"
+		" cs %llu ps %llu util %lu cur_window %u prev_window %u active_wins %u"
+		, __entry->wallclock, __entry->win_start, __entry->delta,
+		__entry->evt, __entry->cpu,
+		__entry->cur_freq, __entry->cur_pid,
+>>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 		__entry->pid, __entry->comm, __entry->mark_start,
 		__entry->delta_m, __entry->demand,
 		__entry->sum, __entry->irqtime,
@@ -1113,7 +1129,11 @@ TRACE_EVENT(walt_update_history,
 		__field(	 int,	samples			)
 		__field(	 int,	evt			)
 		__field(	 u64,	demand			)
+<<<<<<< HEAD
 		__field(	 u64,	walt_avg		)
+=======
+		__field(unsigned int,	walt_avg		)
+>>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 		__field(unsigned int,	pelt_avg		)
 		__array(	 u32,	hist, RAVG_HIST_SIZE_MAX)
 		__field(	 int,	cpu			)
@@ -1135,7 +1155,11 @@ TRACE_EVENT(walt_update_history,
 	),
 
 	TP_printk("%d (%s): runtime %u samples %d event %d demand %llu"
+<<<<<<< HEAD
 		" walt %llu pelt %u (hist: %u %u %u %u %u) cpu %d",
+=======
+		" walt %u pelt %u (hist: %u %u %u %u %u) cpu %d",
+>>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 		__entry->pid, __entry->comm,
 		__entry->runtime, __entry->samples, __entry->evt,
 		__entry->demand,
