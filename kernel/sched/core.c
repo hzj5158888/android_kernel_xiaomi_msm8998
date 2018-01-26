@@ -2546,8 +2546,14 @@ void wake_up_new_task(struct task_struct *p)
 	unsigned long flags;
 	struct rq *rq;
 
+<<<<<<< HEAD
+=======
+	add_new_task_to_grp(p);
+>>>>>>> c38e8971f4a0... sched: Fixup some ordering
 	raw_spin_lock_irqsave(&p->pi_lock, flags);
 	p->state = TASK_RUNNING;
+
+	walt_init_new_task_load(p);
 
 	walt_init_new_task_load(p);
 
