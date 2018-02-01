@@ -1726,8 +1726,15 @@ struct task_struct {
 
 	cputime_t utime, stime, utimescaled, stimescaled;
 	cputime_t gtime;
+<<<<<<< HEAD
 	atomic64_t *time_in_state;
 	unsigned int max_state;
+=======
+#ifdef CONFIG_CPU_FREQ_TIMES
+	u64 *time_in_state;
+	unsigned int max_state;
+#endif
+>>>>>>> fba21f6831a2... ANDROID: cpufreq: track per-task time in state
 	struct prev_cputime prev_cputime;
 #ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
 	seqlock_t vtime_seqlock;
