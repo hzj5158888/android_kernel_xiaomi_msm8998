@@ -287,6 +287,7 @@ config REMOVE_INPUT_BOOST_FREQ_LP
 	  use cpuinfo.min_freq. In case the device has some kind of quirk
 	  of using a higher than cpuinfo.min_freq (e.g. OnePlus 5/5T/6)
 	  this frequency will be used.
+<<<<<<< HEAD
 
 config REMOVE_INPUT_BOOST_FREQ_PERF
 	int "Performance cluster return frequency"
@@ -298,6 +299,8 @@ config REMOVE_INPUT_BOOST_FREQ_PERF
 	  of using a higher than cpuinfo.min_freq (e.g. OnePlus 5/5T/6)
 	  this frequency will be used.
 
+=======
+>>>>>>> 54cd0660d650d... cpu_input_boost: add an option to choose a custom boost finish return freq for the LP cluster
 endif
 
 comment "CPU frequency scaling drivers"
