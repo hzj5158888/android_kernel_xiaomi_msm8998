@@ -923,16 +923,16 @@ struct v4l2_event32 {
 
 static int put_v4l2_event32(struct v4l2_event *kp, struct v4l2_event32 __user *up)
 {
-	if (!access_ok(VERIFY_WRITE, up, sizeof(struct v4l2_event32)) ||
-		convert_in_user(&kp->type, &up->type) ||
-		copy_in_user(&up->u, &kp->u, sizeof(kp->u)) ||
-		convert_in_user(&kp->pending, &up->pending) ||
-		convert_in_user(&kp->sequence, &up->sequence) ||
-		convert_in_user(&kp->timestamp.tv_sec, &up->timestamp.tv_sec) ||
-		convert_in_user(&kp->timestamp.tv_nsec, &up->timestamp.tv_nsec) ||
-		convert_in_user(&kp->id, &up->id) ||
-		copy_in_user(up->reserved, kp->reserved, 8 * sizeof(__u32)))
-			return -EFAULT;
+	if (!access_ok(VERIFY_WRITE, up, sizeof(*up)) ||
+	    assign_in_user(&up->type, &kp->type) ||
+	    copy_in_user(&up->u, &kp->u, sizeof(kp->u)) ||
+	    assign_in_user(&up->pending, &kp->pending) ||
+	    assign_in_user(&up->sequence, &kp->sequence) ||
+	    assign_in_user(&up->timestamp.tv_sec, &kp->timestamp.tv_sec) ||
+	    assign_in_user(&up->timestamp.tv_nsec, &kp->timestamp.tv_nsec) ||
+	    assign_in_user(&up->id, &kp->id) ||
+	    copy_in_user(up->reserved, kp->reserved, sizeof(up->reserved)))
+		return -EFAULT;
 	return 0;
 }
 
