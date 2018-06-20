@@ -4811,11 +4811,8 @@ static int binder_open(struct inode *nodp, struct file *filp)
 	proc = kzalloc(sizeof(*proc), GFP_KERNEL);
 	if (proc == NULL)
 		return -ENOMEM;
-<<<<<<< HEAD
 	spin_lock_init(&proc->inner_lock);
 	spin_lock_init(&proc->outer_lock);
-=======
->>>>>>> v4.4.85
 	get_task_struct(current->group_leader);
 	proc->tsk = current->group_leader;
 	INIT_LIST_HEAD(&proc->todo);
