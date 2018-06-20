@@ -1845,18 +1845,13 @@ static int build_dentry_path(struct dentry *dentry,
 			     int *pfreepath)
 {
 	char *path;
-	struct inode *dir;
 
-	rcu_read_lock();
-	dir = d_inode_rcu(dentry->d_parent);
-	if (dir && ceph_snap(dir) == CEPH_NOSNAP) {
-		*pino = ceph_ino(dir);
-		rcu_read_unlock();
+	if (ceph_snap(d_inode(dentry->d_parent)) == CEPH_NOSNAP) {
+		*pino = ceph_ino(d_inode(dentry->d_parent));
 		*ppath = dentry->d_name.name;
 		*ppathlen = dentry->d_name.len;
 		return 0;
 	}
-	rcu_read_unlock();
 	path = ceph_mdsc_build_path(dentry, ppathlen, pino, 1);
 	if (IS_ERR(path))
 		return PTR_ERR(path);
