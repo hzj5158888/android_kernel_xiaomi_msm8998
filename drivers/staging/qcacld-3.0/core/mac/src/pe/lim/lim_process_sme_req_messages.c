@@ -1995,7 +1995,7 @@ end:
 	pe_debug("Send failure status on sessionid: %d with ret_code: %d",
 		sme_session_id, ret_code);
 	lim_send_sme_join_reassoc_rsp(mac_ctx, eWNI_SME_JOIN_RSP, ret_code,
-		(tSirResultCodes) eSIR_MAC_UNSPEC_FAILURE_STATUS,
+		eSIR_MAC_UNSPEC_FAILURE_STATUS,
 		sme_transaction_id);
 }
 
@@ -3527,7 +3527,7 @@ void __lim_process_sme_assoc_cnf_new(tpAniSirGlobal mac_ctx, uint32_t msg_type,
 				       sta_ds->mlmStaContext.subType,
 				       true, sta_ds->mlmStaContext.authType,
 				       sta_ds->assocId, true,
-				       eSIR_MAC_UNSPEC_FAILURE_STATUS,
+				       (tSirResultCodes) eSIR_MAC_UNSPEC_FAILURE_STATUS,
 				       session_entry);
 	}
 end:
