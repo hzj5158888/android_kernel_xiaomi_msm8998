@@ -1995,7 +1995,7 @@ end:
 	pe_debug("Send failure status on sessionid: %d with ret_code: %d",
 		sme_session_id, ret_code);
 	lim_send_sme_join_reassoc_rsp(mac_ctx, eWNI_SME_JOIN_RSP, ret_code,
-		eSIR_MAC_UNSPEC_FAILURE_STATUS,
+		eSIR_MAC_UNSPEC_FAILURE_STATUS, session, sme_session_id,
 		sme_transaction_id);
 }
 
