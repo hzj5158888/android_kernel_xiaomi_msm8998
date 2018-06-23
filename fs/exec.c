@@ -1640,14 +1640,6 @@ static int do_execveat_common(int fd, struct filename *filename,
 	if (retval < 0)
 		goto out;
 
-<<<<<<< HEAD
-	if (is_su && capable(CAP_SYS_ADMIN)) {
-		current->flags |= PF_SU;
-		su_exec();
-	}
-
-=======
->>>>>>> b3038323209f... Fix EAS build errors
 	/* execve succeeded */
 	current->fs->in_exec = 0;
 	current->in_execve = 0;
