@@ -7342,19 +7342,10 @@ static int start_cpu(bool boosted)
 
 static inline int find_best_target(struct task_struct *p, bool boosted, bool prefer_idle)
 {
-<<<<<<< HEAD
 	int target_cpu = -1;
 	unsigned long target_util = prefer_idle ? ULONG_MAX : 0;
 	unsigned long backup_capacity = ULONG_MAX;
 	int best_idle_cpu = -1;
-=======
-	unsigned long min_util = boosted_task_util(p);
-	unsigned long target_capacity = ULONG_MAX;
-	unsigned long min_wake_util = ULONG_MAX;
-	unsigned long target_max_spare_cap = 0;
-	unsigned long best_active_util = ULONG_MAX;
-	unsigned long target_idle_max_spare_cap = 0;
->>>>>>> f0ab96e979f8... sched/fair: fix incorrect CPU selection for non latency sensitive tasks
 	int best_idle_cstate = INT_MAX;
 	int backup_cpu = -1;
 	unsigned long min_util = boosted_task_util(p);
@@ -7421,7 +7412,6 @@ static inline int find_best_target(struct task_struct *p, bool boosted, bool pre
 
 			cur_capacity = capacity_curr_of(i);
 
-<<<<<<< HEAD
 			if (new_util < cur_capacity) {
 				if (cpu_rq(i)->nr_running) {
 					/*
@@ -7455,96 +7445,6 @@ static inline int find_best_target(struct task_struct *p, bool boosted, bool pre
 				backup_capacity = cur_capacity;
 				backup_cpu = i;
 			}
-=======
-			/*
-			 * Favor CPUs with smaller capacity for Non latency
-			 * sensitive tasks.
-			 */
-			if (capacity_orig > target_capacity)
-				continue;
-
-			/*
-			 * Case B) Non latency sensitive tasks on IDLE CPUs.
-			 *
-			 * Find an optimal backup IDLE CPU for non latency
-			 * sensitive tasks.
-			 *
-			 * Looking for:
-			 * - minimizing the capacity_orig,
-			 *   i.e. preferring LITTLE CPUs
-			 * - favoring shallowest idle states
-			 *   i.e. avoid to wakeup deep-idle CPUs
-			 *
-			 * The following code path is used by non latency
-			 * sensitive tasks if IDLE CPUs are available. If at
-			 * least one of such CPUs are available it sets the
-			 * best_idle_cpu to the most suitable idle CPU to be
-			 * selected.
-			 *
-			 * If idle CPUs are available, favour these CPUs to
-			 * improve performances by spreading tasks.
-			 * Indeed, the energy_diff() computed by the caller
-			 * will take care to ensure the minimization of energy
-			 * consumptions without affecting performance.
-			 */
-			if (idle_cpu(i)) {
-				int idle_idx = idle_get_state_idx(cpu_rq(i));
-
-				/* Favor CPUs that won't end up running at a
-				 * high OPP.
-				 */
-				if ((capacity_orig - min_capped_util) <
-					target_idle_max_spare_cap)
-					continue;
-
-				/*
-				 * Skip CPUs in deeper idle state, but only
-				 * if they are also less energy efficient.
-				 * IOW, prefer a deep IDLE LITTLE CPU vs a
-				 * shallow idle big CPU.
-				 */
-				if (sysctl_sched_cstate_aware &&
-				    best_idle_cstate <= idle_idx)
-					continue;
-
-				/* Keep track of best idle CPU */
-				target_capacity = capacity_orig;
-				target_idle_max_spare_cap = capacity_orig -
-							    min_capped_util;
-				best_idle_cstate = idle_idx;
-				best_idle_cpu = i;
-				continue;
-			}
-
-			/*
-			 * Case C) Non latency sensitive tasks on ACTIVE CPUs.
-			 *
-			 * Pack tasks in the most energy efficient capacities.
-			 *
-			 * This task packing strategy prefers more energy
-			 * efficient CPUs (i.e. pack on smaller maximum
-			 * capacity CPUs) while also trying to spread tasks to
-			 * run them all at the lower OPP.
-			 *
-			 * This assumes for example that it's more energy
-			 * efficient to run two tasks on two CPUs at a lower
-			 * OPP than packing both on a single CPU but running
-			 * that CPU at an higher OPP.
-			 *
-			 * Thus, this case keep track of the CPU with the
-			 * smallest maximum capacity and highest spare maximum
-			 * capacity.
-			 */
-
-			/* Favor CPUs with maximum spare capacity */
-			if ((capacity_orig - min_capped_util) <
-				target_max_spare_cap)
-				continue;
-
-			target_max_spare_cap = capacity_orig - min_capped_util;
-			target_capacity = capacity_orig;
-			target_cpu = i;
->>>>>>> f0ab96e979f8... sched/fair: fix incorrect CPU selection for non latency sensitive tasks
 		}
 	} while (sg = sg->next, sg != sd->groups);
 
