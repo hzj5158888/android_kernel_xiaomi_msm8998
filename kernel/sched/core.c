@@ -94,7 +94,6 @@
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/sched.h>
-#include "walt.h"
 
 #include "walt.h"
 
@@ -1393,10 +1392,6 @@ void set_task_cpu(struct task_struct *p, unsigned int new_cpu)
 		perf_event_task_migrate(p);
 
 		walt_fixup_busy_time(p, new_cpu);
-<<<<<<< HEAD
-=======
-		fixup_busy_time(p, new_cpu);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 	}
 
 	__set_task_cpu(p, new_cpu);
@@ -2120,19 +2115,9 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags,
 	rq = cpu_rq(task_cpu(p));
 
 	raw_spin_lock(&rq->lock);
-<<<<<<< HEAD
 	wallclock = walt_ktime_clock();
 	walt_update_task_ravg(rq->curr, rq, TASK_UPDATE, wallclock, 0);
 	walt_update_task_ravg(p, rq, TASK_WAKE, wallclock, 0);
-=======
-	old_load = task_load(p);
-	wallclock = walt_ktime_clock();
-	walt_update_task_ravg(rq->curr, rq, TASK_UPDATE, wallclock, 0);
-	walt_update_task_ravg(p, rq, TASK_WAKE, wallclock, 0);
-	wallclock = sched_ktime_clock();
-	update_task_ravg(rq->curr, rq, TASK_UPDATE, wallclock, 0);
-	update_task_ravg(p, rq, TASK_WAKE, wallclock, 0);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 	raw_spin_unlock(&rq->lock);
 
 	p->sched_contributes_to_load = !!task_contributes_to_load(p);
@@ -2203,14 +2188,6 @@ static void try_to_wake_up_local(struct task_struct *p)
 	if (!task_on_rq_queued(p)) {
 		u64 wallclock = walt_ktime_clock();
 
-<<<<<<< HEAD
-=======
-		update_task_ravg(rq->curr, rq, TASK_UPDATE, wallclock, 0);
-		update_task_ravg(p, rq, TASK_WAKE, wallclock, 0);
-
-		wallclock = walt_ktime_clock();
-
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 		walt_update_task_ravg(rq->curr, rq, TASK_UPDATE, wallclock, 0);
 		walt_update_task_ravg(p, rq, TASK_WAKE, wallclock, 0);
 		ttwu_activate(rq, p, ENQUEUE_WAKEUP);
@@ -2286,13 +2263,10 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
 
 	INIT_LIST_HEAD(&p->se.group_node);
 	walt_init_new_task_load(p);
-<<<<<<< HEAD
 
 #ifdef CONFIG_FAIR_GROUP_SCHED
 	p->se.cfs_rq			= NULL;
 #endif
-=======
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 
 #ifdef CONFIG_SCHEDSTATS
 	memset(&p->se.statistics, 0, sizeof(p->se.statistics));
@@ -2572,16 +2546,10 @@ void wake_up_new_task(struct task_struct *p)
 	unsigned long flags;
 	struct rq *rq;
 
-<<<<<<< HEAD
 	raw_spin_lock_irqsave(&p->pi_lock, flags);
 	p->state = TASK_RUNNING;
 
 	walt_init_new_task_load(p);
-=======
-	add_new_task_to_grp(p);
-	walt_init_new_task_load(p);
-	raw_spin_lock_irqsave(&p->pi_lock, flags);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 
 	/* Initialize new task's runnable average */
 	init_entity_runnable_average(&p->se);
@@ -2597,12 +2565,7 @@ void wake_up_new_task(struct task_struct *p)
 	__set_task_cpu(p, select_task_rq(p, task_cpu(p), SD_BALANCE_FORK, 0, 1));
 #endif
 	rq = __task_rq_lock(p);
-<<<<<<< HEAD
 	update_rq_clock(rq);
-=======
-	mark_task_starting(p);
-	walt_mark_task_starting(p);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 	post_init_entity_util_avg(&p->se);
 
 	walt_mark_task_starting(p);
@@ -3125,20 +3088,12 @@ void scheduler_tick(void)
 	sched_clock_tick();
 
 	raw_spin_lock(&rq->lock);
-<<<<<<< HEAD
 	walt_set_window_start(rq);
 	walt_update_task_ravg(rq->curr, rq, TASK_UPDATE,
 			walt_ktime_clock(), 0);
-=======
-	old_load = task_load(curr);
-	walt_set_window_start(rq);
-	set_window_start(rq);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 	update_rq_clock(rq);
 	curr->sched_class->task_tick(rq, curr, 0);
 	update_cpu_load_active(rq);
-	walt_update_task_ravg(rq->curr, rq, TASK_UPDATE,
-			walt_ktime_clock(), 0);
 	calc_global_load_tick(rq);
 	raw_spin_unlock(&rq->lock);
 
@@ -5899,10 +5854,6 @@ migration_call(struct notifier_block *nfb, unsigned long action, void *hcpu)
 	case CPU_UP_PREPARE:
 		raw_spin_lock_irqsave(&rq->lock, flags);
 		walt_set_window_start(rq);
-<<<<<<< HEAD
-=======
-		set_window_start(rq);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 		raw_spin_unlock_irqrestore(&rq->lock, flags);
 		rq->calc_load_update = calc_load_update;
 		break;
@@ -5924,10 +5875,6 @@ migration_call(struct notifier_block *nfb, unsigned long action, void *hcpu)
 		/* Update our root-domain */
 		raw_spin_lock_irqsave(&rq->lock, flags);
 		walt_migrate_sync_cpu(cpu);
-<<<<<<< HEAD
-=======
-
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 		if (rq->rd) {
 			BUG_ON(!cpumask_test_cpu(cpu, rq->rd->span));
 			set_rq_offline(rq);
@@ -7855,7 +7802,6 @@ void __init sched_init_smp(void)
 {
 	cpumask_var_t non_isolated_cpus;
 
-	walt_init_cpu_efficiency();
 	alloc_cpumask_var(&non_isolated_cpus, GFP_KERNEL);
 	alloc_cpumask_var(&fallback_doms, GFP_KERNEL);
 
@@ -8041,15 +7987,6 @@ void __init sched_init(void)
 		rq->avg_irqload = 0;
 		rq->irqload_ts = 0;
 #endif
-<<<<<<< HEAD
-=======
-		rq->max_idle_balance_cost = sysctl_sched_migration_cost;
-#ifdef CONFIG_SCHED_WALT
-		rq->cur_irqload = 0;
-		rq->avg_irqload = 0;
-		rq->irqload_ts = 0;
-#endif
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 
 		INIT_LIST_HEAD(&rq->cfs_tasks);
 

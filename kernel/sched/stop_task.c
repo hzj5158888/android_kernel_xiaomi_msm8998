@@ -45,10 +45,6 @@ enqueue_task_stop(struct rq *rq, struct task_struct *p, int flags)
 {
 	add_nr_running(rq, 1);
 	walt_inc_cumulative_runnable_avg(rq, p);
-<<<<<<< HEAD
-=======
-	inc_hmp_sched_stats_stop(rq, p);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 }
 
 static void
@@ -56,10 +52,6 @@ dequeue_task_stop(struct rq *rq, struct task_struct *p, int flags)
 {
 	sub_nr_running(rq, 1);
 	walt_dec_cumulative_runnable_avg(rq, p);
-<<<<<<< HEAD
-=======
-	dec_hmp_sched_stats_stop(rq, p);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 }
 
 static void yield_task_stop(struct rq *rq)

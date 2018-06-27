@@ -36,10 +36,6 @@
 #include <trace/events/sched.h>
 #include "tune.h"
 #include "walt.h"
-<<<<<<< HEAD
-=======
-
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 /*
  * Targeted preemption latency for CPU-bound tasks:
  * (default: 6ms * (1 + ilog(ncpus)), units: nanoseconds)
@@ -62,14 +58,9 @@ unsigned int sysctl_sched_cstate_aware = 1;
 unsigned int sysctl_sched_use_walt_cpu_util = 1;
 unsigned int sysctl_sched_use_walt_task_util = 1;
 __read_mostly unsigned int sysctl_sched_walt_cpu_high_irqload =
-<<<<<<< HEAD
 	(10 * NSEC_PER_MSEC);
 #endif
 
-=======
-    (10 * NSEC_PER_MSEC);
-#endif
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 /*
  * The initial- and re-scaling of tunables is configurable
  * (default SCHED_TUNABLESCALING_LOG = *(1+ilog(ncpus))
@@ -4767,10 +4758,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
 			break;
 		cfs_rq->h_nr_running++;
 		walt_inc_cfs_cumulative_runnable_avg(cfs_rq, p);
-<<<<<<< HEAD
-=======
-		inc_cfs_rq_hmp_stats(cfs_rq, p, 1);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 
 		flags = ENQUEUE_WAKEUP;
 	}
@@ -4779,10 +4766,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
 		cfs_rq = cfs_rq_of(se);
 		cfs_rq->h_nr_running++;
 		walt_inc_cfs_cumulative_runnable_avg(cfs_rq, p);
-<<<<<<< HEAD
-=======
-		inc_cfs_rq_hmp_stats(cfs_rq, p, 1);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 
 		if (cfs_rq_throttled(cfs_rq))
 			break;
@@ -4796,31 +4779,7 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
 	}
 
 #ifdef CONFIG_SMP
-<<<<<<< HEAD
 	if (!se) {
-=======
-
-	/*
-	 * Update SchedTune accounting.
-	 *
-	 * We do it before updating the CPU capacity to ensure the
-	 * boost value of the current task is accounted for in the
-	 * selection of the OPP.
-	 *
-	 * We do it also in the case where we enqueue a throttled task;
-	 * we could argue that a throttled task should not boost a CPU,
-	 * however:
-	 * a) properly implementing CPU boosting considering throttled
-	 *    tasks will increase a lot the complexity of the solution
-	 * b) it's not easy to quantify the benefits introduced by
-	 *    such a more complex solution.
-	 * Thus, for the time being we go for the simple solution and boost
-	 * also for throttled RQs.
-	 */
-	schedtune_enqueue_task(p, cpu_of(rq));
-
-	if (energy_aware() && !se) {
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 		walt_inc_cumulative_runnable_avg(rq, p);
 		if (!task_new && !rq->rd->overutilized &&
 		    cpu_overutilized(rq->cpu)) {
@@ -4874,10 +4833,6 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
 			break;
 		cfs_rq->h_nr_running--;
 		walt_dec_cfs_cumulative_runnable_avg(cfs_rq, p);
-<<<<<<< HEAD
-=======
-		dec_cfs_rq_hmp_stats(cfs_rq, p, 1);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 
 		/* Don't dequeue parent if it has other entities besides us */
 		if (cfs_rq->load.weight) {
@@ -4900,10 +4855,6 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
 		cfs_rq = cfs_rq_of(se);
 		cfs_rq->h_nr_running--;
 		walt_dec_cfs_cumulative_runnable_avg(cfs_rq, p);
-<<<<<<< HEAD
-=======
-		dec_cfs_rq_hmp_stats(cfs_rq, p, 1);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 
 		if (cfs_rq_throttled(cfs_rq))
 			break;
@@ -4922,40 +4873,8 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
 	}
 
 #ifdef CONFIG_SMP
-<<<<<<< HEAD
 	if (!se)
 		walt_dec_cumulative_runnable_avg(rq, p);
-=======
-
-	/*
-	 * Update SchedTune accounting
-	 *
-	 * We do it before updating the CPU capacity to ensure the
-	 * boost value of the current task is accounted for in the
-	 * selection of the OPP.
-	 */
-	schedtune_dequeue_task(p, cpu_of(rq));
-
-	if (!se) {
-		walt_dec_cumulative_runnable_avg(rq, p);
-
-		/*
-		 * We want to potentially trigger a freq switch
-		 * request only for tasks that are going to sleep;
-		 * this is because we get here also during load
-		 * balancing, but in these cases it seems wise to
-		 * trigger as single request after load balancing is
-		 * done.
-		 */
-		if (task_sleep) {
-			if (rq->cfs.nr_running)
-				update_capacity_of(cpu_of(rq));
-			else if (sched_freq())
-				set_cfs_cpu_capacity(cpu_of(rq), false, 0);
-		}
-	}
-
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 #endif /* CONFIG_SMP */
 
 	hrtick_update(rq);
@@ -5981,11 +5900,7 @@ static int wake_affine(struct sched_domain *sd, struct task_struct *p,
 static inline unsigned long task_util(struct task_struct *p)
 {
 #ifdef CONFIG_SCHED_WALT
-<<<<<<< HEAD
 	if (!walt_disabled && sysctl_sched_use_walt_task_util) {
-=======
-	if (!walt_disabled && sysctl_sched_use_walt_cpu_util) {
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 		unsigned long demand = p->ravg.demand;
 		return (demand << 10) / walt_ravg_window;
 	}
@@ -6543,11 +6458,6 @@ static inline int find_best_target(struct task_struct *p, int *backup_cpu,
 			new_util = max(min_util, new_util);
 			if (new_util > capacity_orig)
 				continue;
-
-#ifdef CONFIG_SCHED_WALT
-			if (walt_cpu_high_irqload(i))
-				continue;
-#endif
 
 			/*
 			 * Case A) Latency sensitive tasks

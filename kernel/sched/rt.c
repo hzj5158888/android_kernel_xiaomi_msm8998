@@ -8,14 +8,9 @@
 #include <linux/interrupt.h>
 #include <linux/slab.h>
 #include <linux/irq_work.h>
-<<<<<<< HEAD
 
 #include "walt.h"
 #include "tune.h" 
-=======
-#include <trace/events/sched.h>
-#include "walt.h"
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 
 int sched_rr_timeslice = RR_TIMESLICE;
 
@@ -1354,10 +1349,6 @@ enqueue_task_rt(struct rq *rq, struct task_struct *p, int flags)
 
 	enqueue_rt_entity(rt_se, flags);
 	walt_inc_cumulative_runnable_avg(rq, p);
-<<<<<<< HEAD
-=======
-	inc_hmp_sched_stats_rt(rq, p);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 
 	if (!task_current(rq, p) && p->nr_cpus_allowed > 1)
 		enqueue_pushable_task(rq, p);
@@ -1374,10 +1365,6 @@ static void dequeue_task_rt(struct rq *rq, struct task_struct *p, int flags)
 	update_curr_rt(rq);
 	dequeue_rt_entity(rt_se, flags);
 	walt_dec_cumulative_runnable_avg(rq, p);
-<<<<<<< HEAD
-=======
-	dec_hmp_sched_stats_rt(rq, p);
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 
 	dequeue_pushable_task(rq, p);
 }

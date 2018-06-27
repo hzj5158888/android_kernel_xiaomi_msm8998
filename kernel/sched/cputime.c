@@ -85,20 +85,10 @@ void irqtime_account_irq(struct task_struct *curr)
 #endif
 
 	irq_time_write_end();
-<<<<<<< HEAD
 #ifdef CONFIG_SCHED_WALT
 	if (account)
 		walt_account_irqtime(cpu, curr, delta, wallclock);
 #endif
-=======
-
-	if (account) {
-		walt_account_irqtime(cpu, curr, delta, wallclock);
-		sched_account_irqtime(cpu, curr, delta, wallclock);
-	} else if (curr != this_cpu_ksoftirqd())
-		sched_account_irqstart(cpu, curr, wallclock);
-
->>>>>>> 7dca5f0148a7... sched/walt: Re-add code to allow WALT to function
 	local_irq_restore(flags);
 }
 EXPORT_SYMBOL_GPL(irqtime_account_irq);
