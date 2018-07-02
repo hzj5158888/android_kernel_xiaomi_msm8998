@@ -120,7 +120,7 @@ ifeq ($(KBUILD_SRC),)
 # OK, Make called in directory where kernel src resides
 # Do we want to locate output files in a separate directory?
 ifeq ("$(origin O)", "command line")
-  KBUILD_OUTPUT := $(O)
+  KBUILD_OUTPUT := /root/aosp/$(O)
 endif
 
 # That's our default target when none is given on the command line
