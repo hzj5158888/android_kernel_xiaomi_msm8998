@@ -79,6 +79,7 @@
 					fsmgr_flags = "wait,verify";
 					status = "ok";
 				};
+
                                vendor {
                                        compatible = "android,vendor";
                                        dev = "/dev/block/platform/soc/1da4000.ufshc/by-name/cust";
