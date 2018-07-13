@@ -167,10 +167,15 @@ void account_user_time(struct task_struct *p, cputime_t cputime,
 	/* Account for user time used */
 	acct_account_cputime(p);
 
+<<<<<<< HEAD
 #ifdef CONFIG_CPU_FREQ_STAT
 	/* Account power usage for system time */
 	acct_update_power(p, cputime);
 #endif
+=======
+	/* Account power usage for user time */
+	cpufreq_acct_update_power(p, cputime);
+>>>>>>> e95033171949... ANDROID: Reduce use of #ifdef CONFIG_CPU_FREQ_TIMES
 }
 
 /*
@@ -222,10 +227,15 @@ void __account_system_time(struct task_struct *p, cputime_t cputime,
 	/* Account for system time used */
 	acct_account_cputime(p);
 
+<<<<<<< HEAD
 #ifdef CONFIG_CPU_FREQ_STAT
 	/* Account power usage for system time */
 	acct_update_power(p, cputime);
 #endif
+=======
+	/* Account power usage for system time */
+	cpufreq_acct_update_power(p, cputime);
+>>>>>>> e95033171949... ANDROID: Reduce use of #ifdef CONFIG_CPU_FREQ_TIMES
 }
 
 /*
