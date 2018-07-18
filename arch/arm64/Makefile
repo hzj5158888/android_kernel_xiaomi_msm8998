@@ -33,6 +33,7 @@ $(warning LSE atomics not supported by binutils)
   endif
 endif
 
+<<<<<<< HEAD
 ifeq ($(CONFIG_COMPAT_VDSO), y)
   CROSS_COMPILE_ARM32 ?= $(CONFIG_CROSS_COMPILE_ARM32:"%"=%)
 
@@ -62,6 +63,8 @@ ifeq ($(CONFIG_COMPAT_VDSO), y)
   endif
 endif
 
+=======
+>>>>>>> 28ff2adeeba8... arm64: Optimize for a53 instead of a73
 KBUILD_CFLAGS	+= $(call cc-option,-march=armv8-a+crypto+crc,) $(call cc-option,-mcpu=cortex-a53+crypto+crc,)
 
 ifeq ($(cc-name),clang)
