@@ -29,6 +29,7 @@
 #include <linux/list_lru.h>
 #include <linux/ratelimit.h>
 #include <asm/cacheflush.h>
+
 #include "binder_alloc.h"
 #include "binder_trace.h"
 
@@ -378,7 +379,11 @@ static struct binder_buffer *binder_alloc_new_buf_locked(
 	size_t size, data_offsets_size;
 	int ret;
 
+<<<<<<< HEAD
 	if (!binder_alloc_get_vma(alloc)) {
+=======
+	if (alloc->vma == NULL) {
+>>>>>>> 701eee5a1195... android: binder: Rate-limit debug and userspace triggered err msgs
 		binder_alloc_debug(BINDER_DEBUG_USER_ERROR,
 				   "%d: binder_alloc_buf, no vma\n",
 				   alloc->pid);
