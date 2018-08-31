@@ -83,14 +83,6 @@ const char *ipa_event_name[] = {
 	__stringify(IPA_QUOTA_REACH),
 	__stringify(IPA_SSR_BEFORE_SHUTDOWN),
 	__stringify(IPA_SSR_AFTER_POWERUP),
-<<<<<<< HEAD
-=======
-	__stringify(WLAN_FWR_SSR_BEFORE_SHUTDOWN),
-	__stringify(ADD_VLAN_IFACE),
-	__stringify(DEL_VLAN_IFACE),
-	__stringify(ADD_L2TP_VLAN_MAPPING),
-	__stringify(DEL_L2TP_VLAN_MAPPING)
->>>>>>> de6398b53d4a... msm: ipa: add L2TP/VLAN messaging
 };
 
 const char *ipa_hdr_l2_type_name[] = {
