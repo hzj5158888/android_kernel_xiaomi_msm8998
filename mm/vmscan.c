@@ -3550,6 +3550,13 @@ static int kswapd(void *p)
 		.reclaimed_slab = 0,
 	};
 	const struct cpumask *cpumask = cpumask_of_node(pgdat->node_id);
+#ifdef CONFIG_ANDROID_SIMPLE_LMK
+	struct sched_param param = {
+		.sched_priority = (MAX_RT_PRIO / 2) - 1
+	};
+
+	sched_setscheduler(current, SCHED_FIFO, &param);
+#endif
 
 	lockdep_set_current_reclaim_state(GFP_KERNEL);
 
