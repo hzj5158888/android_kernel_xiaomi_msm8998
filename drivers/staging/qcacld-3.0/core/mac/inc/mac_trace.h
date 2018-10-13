@@ -31,6 +31,7 @@
 
 #include "ani_global.h"
 
+<<<<<<< HEAD
 #define MAC_TRACE_GET_MODULE_ID(data) ((data >> 8) & 0xff)
 #define MAC_TRACE_GET_MSG_ID(data)       (data & 0xffff)
 
@@ -39,6 +40,13 @@ QDF_STATUS pe_release_global_lock(tAniSirLim *psPe);
 
 #ifdef TRACE_RECORD
 
+=======
+#ifdef TRACE_RECORD
+
+#define MAC_TRACE_GET_MODULE_ID(data) ((data >> 8) & 0xff)
+#define MAC_TRACE_GET_MSG_ID(data)       (data & 0xffff)
+
+>>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 #define eLOG_NODROP_MISSED_BEACON_SCENARIO 0
 #define eLOG_PROC_DEAUTH_FRAME_SCENARIO 1
 
@@ -51,6 +59,11 @@ uint8_t *mac_trace_get_lim_msg_string(uint16_t limMsg);
 uint8_t *mac_trace_get_wma_msg_string(uint16_t wmaMsg);
 uint8_t *mac_trace_get_sme_msg_string(uint16_t smeMsg);
 uint8_t *mac_trace_get_info_log_string(uint16_t infoLog);
+<<<<<<< HEAD
+=======
+QDF_STATUS pe_acquire_global_lock(tAniSirLim *psPe);
+QDF_STATUS pe_release_global_lock(tAniSirLim *psPe);
+>>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 
 uint8_t *mac_trace_get_neighbour_roam_state(uint16_t neighbourRoamState);
 uint8_t *mac_trace_getcsr_roam_state(uint16_t csr_roamState);
@@ -59,6 +72,7 @@ uint8_t *mac_trace_get_lim_sme_state(uint16_t limState);
 uint8_t *mac_trace_get_lim_mlm_state(uint16_t mlmState);
 uint8_t *mac_trace_get_tl_state(uint16_t tlState);
 
+<<<<<<< HEAD
 #else
 
 #define mac_trace_get_cfg_msg_string(cfgMsg) "NULL"
@@ -74,6 +88,8 @@ uint8_t *mac_trace_get_tl_state(uint16_t tlState);
 #define mac_trace_get_lim_mlm_state(mlmState) "NULL"
 #define mac_trace_get_tl_state(tlState) "NULL"
 
+=======
+>>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 #endif
 
 #endif

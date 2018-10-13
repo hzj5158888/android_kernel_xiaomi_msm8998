@@ -63,8 +63,11 @@
 #include "cds_concurrency.h"
 #include "nan_datapath.h"
 
+<<<<<<< HEAD
 #define NO_SESSION 0xff
 
+=======
+>>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 static void __lim_init_scan_vars(tpAniSirGlobal pMac)
 {
 	pMac->lim.gLimUseScanModeForLearnMode = 1;

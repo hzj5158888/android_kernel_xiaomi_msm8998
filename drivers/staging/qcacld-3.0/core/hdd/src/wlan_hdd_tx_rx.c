@@ -38,7 +38,10 @@
 #include <net/cfg80211.h>
 #include <net/ieee80211_radiotap.h>
 #include "sap_api.h"
+<<<<<<< HEAD
 #include "sme_power_save_api.h"
+=======
+>>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 #include "wlan_hdd_wmm.h"
 #include "wlan_hdd_tdls.h"
 #include <wlan_hdd_ipa.h>
@@ -1565,10 +1568,16 @@ static inline void hdd_resolve_rx_ol_mode(hdd_context_t *hdd_ctx)
 {
 	if (!(hdd_ctx->config->lro_enable ^
 	    hdd_ctx->config->gro_enable)) {
+<<<<<<< HEAD
 		if (hdd_ctx->config->lro_enable && hdd_ctx->config->gro_enable)
 			hdd_err("Can't enable both LRO and GRO, disabling Rx offload");
 		else
 			hdd_debug("LRO and GRO both are disabled");
+=======
+		hdd_ctx->config->lro_enable && hdd_ctx->config->gro_enable ?
+		hdd_err("Can't enable both LRO and GRO, disabling Rx offload") :
+		hdd_debug("LRO and GRO both are disabled");
+>>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 		hdd_ctx->ol_enable = 0;
 	} else if (hdd_ctx->config->lro_enable) {
 		hdd_debug("Rx offload LRO is enabled");
