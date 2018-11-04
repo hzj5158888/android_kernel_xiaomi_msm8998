@@ -64,24 +64,17 @@ extern int register_refined_jiffies(long clock_tick_rate);
 /* TICK_USEC is the time between ticks in usec assuming fake USER_HZ */
 #define TICK_USEC ((1000000UL + USER_HZ/2) / USER_HZ)
 
-<<<<<<< HEAD
 #ifndef __jiffy_arch_data
 #define __jiffy_arch_data
 #endif
 
-=======
->>>>>>> 7f4a19e36215... UPSTREAM: jiffies.h: declare jiffies and jiffies_64 with ____cacheline_aligned_in_smp
 /*
  * The 64-bit value is not atomic - you MUST NOT read it
  * without sampling the sequence number in jiffies_lock.
  * get_jiffies_64() will do this for you as appropriate.
  */
 extern u64 __cacheline_aligned_in_smp jiffies_64;
-<<<<<<< HEAD
 extern unsigned long volatile __cacheline_aligned_in_smp __jiffy_arch_data jiffies;
-=======
-extern unsigned long volatile __cacheline_aligned_in_smp jiffies;
->>>>>>> 7f4a19e36215... UPSTREAM: jiffies.h: declare jiffies and jiffies_64 with ____cacheline_aligned_in_smp
 
 #if (BITS_PER_LONG < 64)
 u64 get_jiffies_64(void);
