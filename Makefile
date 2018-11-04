@@ -729,10 +729,7 @@ KBUILD_CFLAGS += $(call cc-disable-warning, unused-variable)
 KBUILD_CFLAGS += $(call cc-disable-warning, format-invalid-specifier)
 KBUILD_CFLAGS += $(call cc-disable-warning, gnu)
 KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member)
-<<<<<<< HEAD
 KBUILD_CFLAGS += $(call cc-disable-warning, duplicate-decl-specifier)
-=======
->>>>>>> 001e74612fea... UPSTREAM: kbuild: clang: Disable 'address-of-packed-member' warning
 # Quiet clang warning: comparison of unsigned expression < 0 is always false
 KBUILD_CFLAGS += $(call cc-disable-warning, tautological-compare)
 # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
