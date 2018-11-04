@@ -52,20 +52,12 @@
 #include <a_debug.h>
 #define FWLOG_DEBUG   ATH_DEBUG_MAKE_MODULE_MASK(0)
 
-<<<<<<< HEAD
 static int get_version;
 static int gprint_limiter;
 static bool tgt_assert_enable;
 
 #ifdef WLAN_DEBUG
 
-=======
-#ifdef WLAN_DEBUG
-
-static int get_version;
-static int gprint_limiter;
-static bool tgt_assert_enable;
->>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 static ATH_DEBUG_MASK_DESCRIPTION g_fwlog_debug_description[] = {
 	{FWLOG_DEBUG, "fwlog"},
 };

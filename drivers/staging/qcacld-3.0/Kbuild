@@ -283,27 +283,13 @@ endif
 # Feature flags which are not (currently) configurable via Kconfig
 
 #Whether to build debug version
-<<<<<<< HEAD
 BUILD_DEBUG_VERSION := 0
-=======
-BUILD_DEBUG_VERSION := 1
->>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 
 #Enable this flag to build driver in diag version
 BUILD_DIAG_VERSION := 1
 
 #Do we panic on bug?  default is to warn
-<<<<<<< HEAD
 PANIC_ON_BUG := 0
-=======
-ifeq ($(CONFIG_SLUB_DEBUG), y)
-	PANIC_ON_BUG := 1
-else ifeq ($(CONFIG_PERF_DEBUG), y)
-	PANIC_ON_BUG := 1
-else
-	PANIC_ON_BUG := 0
-endif
->>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 
 #Enable OL debug and wmi unified functions
 CONFIG_ATH_PERF_PWR_OFFLOAD := 1
@@ -1926,13 +1912,10 @@ ifeq ($(call cc-option-yn, -Wheader-guard),y)
 EXTRA_CFLAGS += -Wheader-guard
 endif
 
-<<<<<<< HEAD
 # To build without debug just ignore not used code.
 EXTRA_CFLAGS += $(call cc-disable-warning,unused-variable,)
 EXTRA_CFLAGS += $(call cc-disable-warning,unused-function,)
 
-=======
->>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 # If the module name is not "wlan", then the define MULTI_IF_NAME to be the
 # same a the QCA CHIP name. The host driver will then append MULTI_IF_NAME to
 # any string that must be unique for all instances of the driver on the system.

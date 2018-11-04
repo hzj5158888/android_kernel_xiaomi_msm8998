@@ -70,11 +70,8 @@
 #include "cds_regdomain.h"
 #include "cds_utils.h"
 
-<<<<<<< HEAD
 #define NO_SESSION 0xff
 
-=======
->>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 /* define NO_PAD_TDLS_MIN_8023_SIZE to NOT padding: See CR#447630
    There was IOT issue with cisco 1252 open mode, where it pads
    discovery req/teardown frame with some junk value up to min size.

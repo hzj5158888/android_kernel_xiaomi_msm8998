@@ -132,23 +132,16 @@ config ICMP_DISABLE_PS
 	bool "Enable ICMP packet disable powersave feature"
 	default n
 
-<<<<<<< HEAD
 config BUILD_TIMESTAMP
-=======
-config CONFIG_BUILD_TIMESTAMP
->>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 	bool "Embed timestamp in wlan version"
 	default n
 
 config WLAN_FEATURE_SARV1_TO_SARV2
 	bool "Enable conversion of SAR v1 to v2 feature"
 	default n
-<<<<<<< HEAD
 
 config WLAN_FEATURE_FILS
 	bool "Enable FILS_SK feature"
 	default n
 
-=======
->>>>>>> dd0be6231671... Add 'drivers/staging/qcacld-3.0/' from tag 'LA.UM.7.4.r1-03500-8x98.0'
 endif # QCA_CLD_WLAN
