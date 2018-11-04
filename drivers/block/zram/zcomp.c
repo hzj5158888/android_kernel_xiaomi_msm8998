@@ -50,34 +50,20 @@ static void zcomp_strm_free(struct zcomp_strm *zstrm)
  * allocate new zcomp_strm structure with ->tfm initialized by
  * backend, return NULL on error
  */
-static struct zcomp_strm *zcomp_strm_alloc(struct zcomp *comp, gfp_t flags)
+static struct zcomp_strm *zcomp_strm_alloc(struct zcomp *comp)
 {
-<<<<<<< HEAD
 	struct zcomp_strm *zstrm = kmalloc(sizeof(*zstrm), GFP_KERNEL);
 	if (!zstrm)
 		return NULL;
 
 	zstrm->tfm = crypto_alloc_comp(comp->name, 0, 0);
-=======
-	struct zcomp_strm *zstrm = kmalloc(sizeof(*zstrm), flags);
-	if (!zstrm)
-		return NULL;
-
-	zstrm->private = comp->backend->create(flags);
->>>>>>> 7a3dc52a7679... UPSTREAM: zram: pass gfp from zcomp frontend to backend
 	/*
 	 * allocate 2 pages. 1 for compressed data, plus 1 extra for the
 	 * case when compressed size is larger than the original one
 	 */
-<<<<<<< HEAD
 	zstrm->buffer = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, 1);
 	if (IS_ERR_OR_NULL(zstrm->tfm) || !zstrm->buffer) {
 		zcomp_strm_free(zstrm);
-=======
-	zstrm->buffer = (void *)__get_free_pages(flags | __GFP_ZERO, 1);
-	if (!zstrm->private || !zstrm->buffer) {
-		zcomp_strm_free(comp, zstrm);
->>>>>>> 7a3dc52a7679... UPSTREAM: zram: pass gfp from zcomp frontend to backend
 		zstrm = NULL;
 	}
 	return zstrm;
@@ -85,52 +71,7 @@ static struct zcomp_strm *zcomp_strm_alloc(struct zcomp *comp, gfp_t flags)
 
 bool zcomp_available_algorithm(const char *comp)
 {
-<<<<<<< HEAD
 	int i = 0;
-=======
-	struct zcomp_strm_multi *zs = comp->stream;
-	struct zcomp_strm *zstrm;
-
-	while (1) {
-		spin_lock(&zs->strm_lock);
-		if (!list_empty(&zs->idle_strm)) {
-			zstrm = list_entry(zs->idle_strm.next,
-					struct zcomp_strm, list);
-			list_del(&zstrm->list);
-			spin_unlock(&zs->strm_lock);
-			return zstrm;
-		}
-		/* zstrm streams limit reached, wait for idle stream */
-		if (zs->avail_strm >= zs->max_strm) {
-			spin_unlock(&zs->strm_lock);
-			wait_event(zs->strm_wait, !list_empty(&zs->idle_strm));
-			continue;
-		}
-		/* allocate new zstrm stream */
-		zs->avail_strm++;
-		spin_unlock(&zs->strm_lock);
-		/*
-		 * This function can be called in swapout/fs write path
-		 * so we can't use GFP_FS|IO. And it assumes we already
-		 * have at least one stream in zram initialization so we
-		 * don't do best effort to allocate more stream in here.
-		 * A default stream will work well without further multiple
-		 * streams. That's why we use NORETRY | NOWARN.
-		 */
-		zstrm = zcomp_strm_alloc(comp, GFP_NOIO | __GFP_NORETRY |
-					__GFP_NOWARN);
-		if (!zstrm) {
-			spin_lock(&zs->strm_lock);
-			zs->avail_strm--;
-			spin_unlock(&zs->strm_lock);
-			wait_event(zs->strm_wait, !list_empty(&zs->idle_strm));
-			continue;
-		}
-		break;
-	}
-	return zstrm;
-}
->>>>>>> 7a3dc52a7679... UPSTREAM: zram: pass gfp from zcomp frontend to backend
 
 	while (backends[i]) {
 		if (sysfs_streq(comp, backends[i]))
@@ -174,18 +115,8 @@ ssize_t zcomp_available_show(const char *comp, char *buf)
 		sz += scnprintf(buf + sz, PAGE_SIZE - sz - 2,
 				"[%s] ", comp);
 
-<<<<<<< HEAD
 	sz += scnprintf(buf + sz, PAGE_SIZE - sz, "\n");
 	return sz;
-=======
-	zstrm = zcomp_strm_alloc(comp, GFP_KERNEL);
-	if (!zstrm) {
-		kfree(zs);
-		return -ENOMEM;
-	}
-	list_add(&zstrm->list, &zs->idle_strm);
-	return 0;
->>>>>>> 7a3dc52a7679... UPSTREAM: zram: pass gfp from zcomp frontend to backend
 }
 
 struct zcomp_strm *zcomp_stream_get(struct zcomp *comp)
@@ -227,20 +158,9 @@ int zcomp_decompress(struct zcomp_strm *zstrm,
 {
 	unsigned int dst_len = PAGE_SIZE;
 
-<<<<<<< HEAD
 	return crypto_comp_decompress(zstrm->tfm,
 			src, src_len,
 			dst, &dst_len);
-=======
-	comp->stream = zs;
-	mutex_init(&zs->strm_lock);
-	zs->zstrm = zcomp_strm_alloc(comp, GFP_KERNEL);
-	if (!zs->zstrm) {
-		kfree(zs);
-		return -ENOMEM;
-	}
-	return 0;
->>>>>>> 7a3dc52a7679... UPSTREAM: zram: pass gfp from zcomp frontend to backend
 }
 
 static int __zcomp_cpu_notifier(struct zcomp *comp,
