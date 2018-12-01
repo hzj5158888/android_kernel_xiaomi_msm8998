@@ -486,9 +486,9 @@ static ssize_t device_prepare_set(struct device *dev,
 	int rc;
 	struct fpc1020_data *fpc1020 = dev_get_drvdata(dev);
 
-	if (!strncmp(buf, "enable", DSTRLEN("enable"))) {
+	if (!strncmp(buf, "enable", strlen("enable"))) {
 		rc = device_prepare(fpc1020, true);
-	} else if (!strncmp(buf, "disable", DSTRLEN("disable"))) {
+	} else if (!strncmp(buf, "disable", strlen("disable"))) {
 		rc = device_prepare(fpc1020, false);
 	} else {
 		return -EINVAL;
@@ -552,9 +552,9 @@ static ssize_t fingerdown_wait_set(struct device *dev,
 	struct fpc1020_data *fpc1020 = dev_get_drvdata(dev);
 
 	dev_dbg(fpc1020->dev, "%s\n", __func__);
-	if (!strncmp(buf, "enable", DSTRLEN("enable")) && fpc1020->prepared)
+	if (!strncmp(buf, "enable", strlen("enable")) && fpc1020->prepared)
 		fpc1020->wait_finger_down = true;
-	else if (!strncmp(buf, "disable", DSTRLEN("disable")) && fpc1020->prepared)
+	else if (!strncmp(buf, "disable", strlen("disable")) && fpc1020->prepared)
 		fpc1020->wait_finger_down = false;
 	else
 		return -EINVAL;
