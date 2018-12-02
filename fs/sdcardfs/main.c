@@ -34,11 +34,6 @@ enum {
 	Opt_reserved_mb,
 	Opt_gid_derivation,
 	Opt_default_normal,
-<<<<<<< HEAD
-=======
-	Opt_nocache,
-	Opt_unshared_obb,
->>>>>>> bc1cf2226ce5... ANDROID: sdcardfs: Add option to not link obb
 	Opt_err,
 };
 
@@ -52,7 +47,6 @@ static const match_table_t sdcardfs_tokens = {
 	{Opt_multiuser, "multiuser"},
 	{Opt_gid_derivation, "derive_gid"},
 	{Opt_default_normal, "default_normal"},
-	{Opt_unshared_obb, "unshared_obb"},
 	{Opt_reserved_mb, "reserved_mb=%u"},
 	{Opt_err, NULL}
 };
@@ -134,15 +128,6 @@ static int parse_options(struct super_block *sb, char *options, int silent,
 		case Opt_default_normal:
 			opts->default_normal = true;
 			break;
-<<<<<<< HEAD
-=======
-		case Opt_nocache:
-			opts->nocache = true;
-			break;
-		case Opt_unshared_obb:
-			opts->unshared_obb = true;
-			break;
->>>>>>> bc1cf2226ce5... ANDROID: sdcardfs: Add option to not link obb
 		/* unknown option */
 		default:
 			if (!silent)
@@ -196,16 +181,13 @@ int parse_options_remount(struct super_block *sb, char *options, int silent,
 				return 0;
 			vfsopts->mask = option;
 			break;
-		case Opt_unshared_obb:
 		case Opt_default_normal:
 		case Opt_multiuser:
 		case Opt_userid:
 		case Opt_fsuid:
 		case Opt_fsgid:
 		case Opt_reserved_mb:
-		case Opt_gid_derivation:
-			if (!silent)
-				pr_warn("Option \"%s\" can't be changed during remount\n", p);
+			pr_warn("Option \"%s\" can't be changed during remount\n", p);
 			break;
 		/* unknown option */
 		default:
