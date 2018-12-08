@@ -2577,6 +2577,29 @@ static ssize_t f2fs_direct_IO(struct kiocb *iocb, struct iov_iter *iter,
 	if (f2fs_force_buffered_io(inode, iocb, iter))
 		return 0;
 
+	if (trace_android_fs_dataread_start_enabled() &&
+	    (iov_iter_rw(iter) == READ)) {
+		char *path, pathbuf[MAX_TRACE_PATHBUF_LEN];
+
+		path = android_fstrace_get_pathname(pathbuf,
+						    MAX_TRACE_PATHBUF_LEN,
+						    inode);
+		trace_android_fs_dataread_start(inode, offset,
+						count, current->pid, path,
+						current->comm);
+	}
+	if (trace_android_fs_datawrite_start_enabled() &&
+	    (iov_iter_rw(iter) == WRITE)) {
+		char *path, pathbuf[MAX_TRACE_PATHBUF_LEN];
+
+		path = android_fstrace_get_pathname(pathbuf,
+						    MAX_TRACE_PATHBUF_LEN,
+						    inode);
+		trace_android_fs_datawrite_start(inode, offset, count,
+						 current->pid, path,
+						 current->comm);
+	}
+
 	do_opu = allow_outplace_dio(inode, iocb, iter);
 
 	trace_f2fs_direct_IO_enter(inode, offset, count, rw);
