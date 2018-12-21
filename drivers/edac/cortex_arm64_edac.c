@@ -594,7 +594,6 @@ static void arm64_erp_local_handler(void *info)
 		kryo2xx_silver_parse_l2merrsr(errdata);
 	break;
 
-	case ARM_CPU_PART_CORTEX_A72:
 	case ARM_CPU_PART_CORTEX_A57:
 		ca57_parse_cpumerrsr(errdata);
 		ca57_parse_l2merrsr(errdata);
@@ -765,7 +764,6 @@ static void check_sbe_event(struct erp_drvdata *drv)
 		kryo2xx_silver_parse_l2merrsr(&errdata);
 	break;
 
-	case ARM_CPU_PART_CORTEX_A72:
 	case ARM_CPU_PART_CORTEX_A57:
 		ca57_parse_cpumerrsr(&errdata);
 		ca57_parse_l2merrsr(&errdata);
