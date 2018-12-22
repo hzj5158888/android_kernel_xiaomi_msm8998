@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2017, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2018 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -13,6 +14,7 @@
 
 #include "ufshcd.h"
 #include "ufs_quirks.h"
+#include <linux/hwinfo.h>
 
 
 static struct ufs_card_fix ufs_fixups[] = {
@@ -81,6 +83,10 @@ void ufs_advertise_fixup_device(struct ufs_hba *hba)
 			/* update quirks */
 			hba->dev_info.quirks |= f->quirk;
 	}
+
+	update_hardware_info(TYPE_EMMC, hba->dev_info.w_manufacturer_id);
+	dev_info(hba->dev, "UFS manufacturer id: 0x%04X\n", hba->dev_info.w_manufacturer_id);
+
 out:
 	kfree(model);
 }

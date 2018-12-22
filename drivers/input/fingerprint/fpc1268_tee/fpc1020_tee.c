@@ -42,6 +42,7 @@
 #include <linux/notifier.h>
 #include <linux/mdss_io_util.h>
 #include <linux/slab.h>
+#include <linux/hwinfo.h>
 
 #define FPC1020_NAME "fpc1020"
 
@@ -490,6 +491,7 @@ static ssize_t device_prepare_set(struct device *dev,
 		rc = device_prepare(fpc1020, true);
 	} else if (!strncmp(buf, "disable", strlen("disable"))) {
 		rc = device_prepare(fpc1020, false);
+		update_hardware_info(TYPE_FP, 0);
 	} else {
 		return -EINVAL;
 	}
