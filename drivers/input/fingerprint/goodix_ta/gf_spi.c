@@ -33,6 +33,7 @@
 #include <linux/of_gpio.h>
 #include <linux/fb.h>
 #include <linux/sched.h>
+#include <linux/hwinfo.h>
 
 #include "gf_spi.h"
 
@@ -379,6 +380,7 @@ static int gf_probe(struct platform_device *pdev)
 	struct device *dev;
 	int major;
 	int rc = 0;
+	int fp_gf = 1;
 
 	gf_dev->process = NULL;
 	gf_dev->display_on = true;
@@ -393,7 +395,12 @@ static int gf_probe(struct platform_device *pdev)
 	if (!gpio_is_valid(gf_dev->reset_gpio)) {
 		pr_err("%s: failed to get reset_gpio, rc = %d\n", __func__, rc);
 		rc = -EINVAL;
+		fp_gf = 0;
 		goto error_dt;
+	}
+
+	if (fp_gf == 1) {
+		update_hardware_info(TYPE_FP, 1);
 	}
 
 	gf_dev->irq_gpio = of_get_named_gpio(pdev->dev.of_node,

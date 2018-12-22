@@ -28,6 +28,7 @@
 #include <linux/i2c.h>
 #include <linux/i2c-dev.h>
 #include <linux/completion.h>
+#include <linux/hwinfo.h>
 
 #include <linux/gpio.h>
 #include <linux/of_gpio.h>
@@ -2193,6 +2194,19 @@ static int fts_probe(struct i2c_client *client,
 		goto ProbeErrorExit_7;
 	}
 
+	error = fts_get_lockdown_info(info->lockdown_info);
+
+	if (error < OK)
+		log_error("%s can't get lockdown info", tag);
+	else {
+		log_error("%s Lockdown:0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x\n", tag,
+				info->lockdown_info[0], info->lockdown_info[1], info->lockdown_info[2], info->lockdown_info[3],
+				info->lockdown_info[4], info->lockdown_info[5], info->lockdown_info[6], info->lockdown_info[7]);
+		update_hardware_info(TYPE_TP_MAKER, info->lockdown_info[6] - 0x30);
+	}
+	dev_set_drvdata(&client->dev, info);
+	device_init_wakeup(&client->dev, 1);
+	fts_info = info;
 #ifdef SCRIPTLESS
 	/*I2C cmd*/
 	if (fts_cmd_class == NULL)

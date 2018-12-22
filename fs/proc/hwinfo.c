@@ -111,6 +111,18 @@ static int hwinfo_proc_show(struct seq_file *m, void *v)
 		break;
 	}
 
+	switch (hw_info.fp_info) {
+	case 0:
+		seq_printf(m, "FP Vendor: FPC\n");
+		break;
+	case 1:
+		seq_printf(m, "FP Vendor: Goodix\n");
+		break;
+	default:
+		seq_printf(m, "FP Vendor: Unknown\n");
+		break;
+	}
+
 	if (HARDWARE_PLATFORM_SAGIT == get_hw_version_platform()) {
 		switch (hw_info.panel_info) {
 		case 0:
@@ -157,7 +169,7 @@ void update_hardware_info(unsigned int type, unsigned int value)
 		hw_info.tp_maker_info = value;
 		break;
 	case TYPE_FP:
-		hw_info.fp_info = hw_info.fp_info;
+		hw_info.fp_info = value;
 		break;
 	default:
 		break;
