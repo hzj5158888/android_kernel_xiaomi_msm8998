@@ -25,7 +25,7 @@ struct {
 	unsigned int pmic_info:2;
 	unsigned int panel_info:4;
 	unsigned int tp_maker_info:5;
-	unsigned int fp_info:1;
+	unsigned int fp_info:2;
 } hw_info;
 
 static int hwinfo_proc_show(struct seq_file *m, void *v)
@@ -111,16 +111,14 @@ static int hwinfo_proc_show(struct seq_file *m, void *v)
 		break;
 	}
 
-	switch (hw_info.fp_info) {
-	case 0:
+	if (hw_info.fp_info == 0) {
 		seq_printf(m, "FP Vendor: FPC\n");
-		break;
-	case 1:
+	}
+	else if (hw_info.fp_info == 1) {
 		seq_printf(m, "FP Vendor: Goodix\n");
-		break;
-	default:
-		seq_printf(m, "FP Vendor: Unknown\n");
-		break;
+	}
+	else {
+		seq_printf(m, "FP Vendor: Unknown %x\n", hw_info.fp_info);
 	}
 
 	if (HARDWARE_PLATFORM_SAGIT == get_hw_version_platform()) {

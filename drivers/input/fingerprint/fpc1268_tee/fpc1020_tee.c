@@ -495,6 +495,7 @@ static int device_prepare(struct fpc1020_data *fpc1020, bool enable)
 			goto rst_gpio_exit;
 		}
 
+		update_hardware_info(TYPE_FP, 0);
 		dev_dbg(dev, "requested irq %d\n", gpio_to_irq(fpc1020->irq_gpio));
 
 		/* Request that the interrupt should be wakeable */
@@ -549,13 +550,15 @@ static ssize_t device_prepare_set(struct device *dev,
 	int rc;
 	struct fpc1020_data *fpc1020 = dev_get_drvdata(dev);
 
-	if (!strncmp(buf, "enable", strlen("enable")))
-		update_hardware_info(TYPE_FP, 0);
+	if (!strncmp(buf, "enable", strlen("enable"))) {
 		rc = device_prepare(fpc1020, true);
-	else if (!strncmp(buf, "disable", strlen("disable")))
+	}
+	else if (!strncmp(buf, "disable", strlen("disable"))) {
 		rc = device_prepare(fpc1020, false);
-	else
+	}
+	else {
 		return -EINVAL;
+	}
 
 	return rc ? rc : count;
 }
