@@ -80,7 +80,7 @@ static void gf_kernel_key_input(struct gf_device *gf_dev, struct gf_key *gf_key)
 	}
 }
 
-extern bool capacitive_keys_enabled;
+int capacitive_keys_enabled = 0;
 
 static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 {
@@ -107,7 +107,7 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			rc = -EFAULT;
 			break;
 		}
-		if (capacitive_keys_enabled)
+		if (capacitive_keys_enabled == 1)
 			gf_kernel_key_input(gf_dev, &gf_key);
 		break;
 	default:

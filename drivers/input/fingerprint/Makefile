@@ -4,5 +4,7 @@
 
 # Each configuration option enables a list of files.
 
+KBUILD_CFLAGS	+= -fPIC
+
 obj-$(CONFIG_FINGERPRINT_GOODIX_TA)	+= goodix_ta/
 obj-$(CONFIG_FINGERPRINT_FPC1268_TEE)	+= fpc1268_tee/
