@@ -6834,7 +6834,6 @@ static inline int __energy_diff(struct energy_env *eenv)
 
 	margin = eenv->nrg.before >> 6; /* ~1.56% */
 
-<<<<<<< HEAD
 	diff = eenv->nrg.after - eenv->nrg.before;
 
 	eenv->nrg.diff = (abs(diff) < margin) ? 0 : eenv->nrg.diff;
@@ -6907,30 +6906,6 @@ energy_diff(struct energy_env *eenv)
 				eenv->cap.before, eenv->cap.after, eenv->cap.delta,
 				0, -eenv->nrg.diff);
 		return eenv->nrg.diff;
-=======
-	/*
-	 * Compare the other CPU candidates to find a CPU which can be
-	 * more energy efficient then EAS_CPU_PRV
-	 */
-	for (cpu_idx = EAS_CPU_NXT; cpu_idx < EAS_CPU_CNT; ++cpu_idx) {
-		/* Skip not valid scheduled candidates */
-		if (eenv->cpu[cpu_idx].cpu_id < 0)
-			continue;
-		/* Compute energy delta wrt EAS_CPU_PRV */
-		eenv->cpu[cpu_idx].nrg_delta =
-			eenv->cpu[cpu_idx].energy -
-			eenv->cpu[EAS_CPU_PRV].energy;
-		/* filter energy variations within the dead-zone margin */
-		if (abs(eenv->cpu[cpu_idx].nrg_delta) < margin)
-			eenv->cpu[cpu_idx].nrg_delta = 0;
-		/* update the schedule candidate with min(nrg_delta) */
-		if (eenv->cpu[cpu_idx].nrg_delta <
-		    eenv->cpu[eenv->next_idx].nrg_delta) {
-			eenv->next_idx = cpu_idx;
-			if (sched_feat(FBT_STRICT_ORDER))
-				break;
-		}
->>>>>>> b2d6ed6642f6a... sched/fair: select the most energy-efficient CPU candidate on wake-up
 	}
 
 	/* Compute normalized energy diff */
