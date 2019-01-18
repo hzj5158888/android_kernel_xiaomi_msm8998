@@ -33,7 +33,6 @@
 #include <linux/of_gpio.h>
 #include <linux/fb.h>
 #include <linux/sched.h>
-#include <linux/hwinfo.h>
 
 #include "gf_spi.h"
 
@@ -80,7 +79,7 @@ static void gf_kernel_key_input(struct gf_device *gf_dev, struct gf_key *gf_key)
 	}
 }
 
-int capacitive_keys_enabled = 0;
+extern bool capacitive_keys_enabled;
 
 static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 {
@@ -107,7 +106,7 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			rc = -EFAULT;
 			break;
 		}
-		if (capacitive_keys_enabled == 1)
+		if (capacitive_keys_enabled)
 			gf_kernel_key_input(gf_dev, &gf_key);
 		break;
 	default:
@@ -256,7 +255,8 @@ static void gf_event_worker(struct work_struct *work)
 		if (gf_dev->display_on)
 			break;
 
-		__pm_wakeup_event(&gf_dev->fp_wakelock, FINGERPRINT_PROCESSING_MS);
+		wake_lock_timeout(&gf_dev->fp_wakelock,
+				msecs_to_jiffies(FINGERPRINT_PROCESSING_MS));
 		break;
 	}
 
@@ -310,7 +310,6 @@ static int gf_probe(struct platform_device *pdev)
 	struct device *dev;
 	int major;
 	int rc = 0;
-	int fp_gf = 1;
 
 	gf_dev->process = NULL;
 	gf_dev->display_on = true;
@@ -321,12 +320,7 @@ static int gf_probe(struct platform_device *pdev)
 	if (!gpio_is_valid(gf_dev->reset_gpio)) {
 		pr_err("%s: failed to get reset_gpio, rc = %d\n", __func__, rc);
 		rc = -EINVAL;
-		fp_gf = 0;
 		goto error_dt;
-	}
-
-	if (fp_gf == 1) {
-		update_hardware_info(TYPE_FP, 1);
 	}
 
 	gf_dev->irq_gpio = of_get_named_gpio(pdev->dev.of_node,
@@ -385,7 +379,7 @@ static int gf_probe(struct platform_device *pdev)
 			WQ_MEM_RECLAIM | WQ_HIGHPRI, 0);
 	INIT_WORK(&gf_dev->event_work, gf_event_worker);
 
-	wakeup_source_init(&gf_dev->fp_wakelock, "fp_wakelock");
+	wake_lock_init(&gf_dev->fp_wakelock, WAKE_LOCK_SUSPEND, "fp_wakelock");
 
 	netlink_init();
 
@@ -410,7 +404,7 @@ static int gf_remove(struct platform_device *pdev)
 
 	netlink_exit();
 
-	wakeup_source_trash(&gf_dev->fp_wakelock);
+	wake_lock_destroy(&gf_dev->fp_wakelock);
 
 	destroy_workqueue(gf_dev->event_workqueue);
 
@@ -446,3 +440,4 @@ MODULE_AUTHOR("Jiangtao Yi, <yijiangtao@goodix.com>");
 MODULE_AUTHOR("Jandy Gou, <gouqingsong@goodix.com>");
 MODULE_DESCRIPTION("goodix fingerprint sensor device driver");
 MODULE_LICENSE("GPL");
+
